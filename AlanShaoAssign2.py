@@ -5,6 +5,9 @@ RACKETSMAX = 20
 BIKESMAX = 15
 TENTSMAX = 25
 
+
+hi iiii
+
 stockMax = {"balls": 20, "rackets": 20, "bikes": 15, "tents": 25}
 stockCurrent = {"balls": 0, "rackets": 0, "bikes": 0, "tents": 0}
 stockHired = {"balls": 0, "rackets": 0, "bikes": 0, "tents": 0}
