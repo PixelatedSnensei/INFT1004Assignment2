@@ -22,11 +22,15 @@ def main():
         else:
             print("Error: invalid command")
 
-def load_inventory_from_csv()
-    with open("HiredInventory.csv", mode="r") as inventory:
+def load_inventory_from_csv():
+    stock = []
+    with open("HiredInventory.csv", mode="r", encoding="utf-8") as inventory:
         reader = csv.DictReader(inventory)
         for row in reader:
-            inventory["Category"] = inventory["Count"]
+            row["Category"] = int(row["Count"])
+            return reader
+
+   
 
 
 def hireItem(
