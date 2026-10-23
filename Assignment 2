@@ -1,18 +1,19 @@
 import csv
 import sys
 
-def main():
-    stock = load_inventory_from_csv()
+def main(): #I have written out all 6 commands that we need to make
+    stock, stock_max = load_inventory_from_csv() #Loads the current available stock level and the maximum stock level
     while True:
-        menuDisplay()
+        menu()
         print()
         command = input("What would you like to do?: ").strip().lower()
+        print()
         if command == "1":
-            display_current_stock()
+            display_current_stock(stock)
         elif command == "2":
-            add_new_category
+            add_new_category(stock)
         elif command == "3":
-            hire_out_or_return_items()
+            hire_out_or_return_items(stock)
         elif command == "4":
             stock_analysis()
         elif command == "5":
@@ -22,15 +23,21 @@ def main():
         else:
             print("Error: invalid command")
 
+def display_stock_current(stock):
+    for key, value in stock:
+        print(f"{key}: {value}")
+
 def load_inventory_from_csv():
-    stock = []
+    stock = {}
     with open("HiredInventory.csv", mode="r", encoding="utf-8") as inventory:
         reader = csv.DictReader(inventory)
         for row in reader:
-            row["Category"] = int(row["Count"])
-            return reader
+            stock[row["Category"]] = int(row["Count"])
+    stock_max = stock.copy()
+    return stock, stock_max
 
-   
+def add_new_category():
+    input = item_taker()    
 
 
 def hireItem(
@@ -48,7 +55,7 @@ def hireItem(
     tentsHired,
 ):
     item = (
-        itemTaker(
+        item_taker(
             "What item would you like to hire?: "
         )
     )
@@ -164,7 +171,7 @@ def returnItem(
     bikesLoaned,
     tentsLoaned,
 ):
-    item = itemTaker(
+    item = item_taker(
         "What item would you like to return?: "
     )
     if item == "balls":
@@ -358,20 +365,18 @@ def check_inventory_limit(
     return True
 
 
-def itemTaker(
-    prompt,
-):
+def item_taker(stock): #incomplete
     while True:
-        item = input(prompt).strip().lower()
-        if (
-            item != "balls"
-            and item != "rackets"
-            and item != "bikes"
-            and item != "tents"
-        ):
-            print("Error: must be balls, rackets, bikes, or tents")
-            continue
-        return item
+        item = input("What item?: ")
+        if item == "":
+            print("Error: name can not be empty")
+        for key in stock:
+            if item == key:
+                print(f"Error: {item} already exist")
+        else:
+                return item
+                
+    
 
 
 def quantityTaker(
@@ -423,7 +428,7 @@ def statusCheck(
         return "High"
 
 
-def menuDisplay():
+def menu():
     print(
         "\n"
         "1. help! = see the list of commands \n"
