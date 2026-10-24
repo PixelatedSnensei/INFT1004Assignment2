@@ -11,7 +11,7 @@ def main(): #I have written out all 6 commands that we need to make
         if command == "1":
             display_current_stock(stock)
         elif command == "2":
-            add_new_category(stock)
+            add_new_category(stock, stock_max)
         elif command == "3":
             hire_out_or_return_items(stock, stock_max)
         elif command == "4":
@@ -37,12 +37,16 @@ def load_inventory_from_csv():
     stock_max = stock.copy()
     return stock, stock_max
 
-def add_new_category(stock):
-    item = new_item_taker(stock)
-    quantity = quantity_taker(None, None)   
-    stock[item] = quantity
-    stock_max[item] = quantity
-    display_current_stock()
+def add_new_category(stock, stock_max):
+    while True:
+        item = new_item_taker(stock)
+        quantity = quantity_taker(None, None)   
+        if quantity > 0:
+            stock[item] = quantity
+            stock_max[item] = quantity
+            display_current_stock()
+            return stock, stock_max
+        print("Error: quantity must be a positive integer")
 
 def hire_out_or_return_items(stock, stock_max):
     display_current_stock()
@@ -51,27 +55,36 @@ def hire_out_or_return_items(stock, stock_max):
         hire_item(stock, stock_max)
         return stock, stock_max
     elif action == "r"
-        return_item()
+        return_item(stock)
+        return stock
     else:
         print("Error: please type H or R")
 
 def hire_item(stock):
-    if sum(stock.values()) == 0:
+    if sum(stock.values()) == 0: #Checks if there are any items available to hire
         print("Error: no hires available")
         return
     while True:
         item = current_item_taker(stock)
         if stock[item] > 0:
-            quantity = quantity_taker(1, stock[item])
-            stock[item] -= quantity
-            print(f"Hired {quantity} {item}. {item} remaining: {stock[item]}")
-            return
+            quantity = quantity_taker()
+            if 0 < quantity <= stock[item]:
+                stock[item] -= quantity
+                print(f"Hired {quantity} {item}. {item} remaining: {stock[item]}")
+                return stock
+            print(f"Error: quantity must be a positive integer and less than or equal to {stock[item]}")
+            continue
         print(f"Error: no {item} available")
 
 def return_item(stock, stock_max):
-    item = new_item_taker(stock)
-    quantity = quantity_taker(1, stock_max[item])
-    stock[item] -= quantity
+    while True:
+        item = new_item_taker(stock)
+        quantity = quantity_taker(1, stock_max[item])
+        if quantity > 0:
+            stock[item] += quantity
+            print(f"Returned{quantity} {item}. {item} remaining: {stock[item]}")
+            return stock
+        print("Error: quantity must be a positive integer")
 
 def current_item_taker(stock):
     while True:
@@ -96,19 +109,12 @@ def new_item_taker(stock,): #Takes item and checks if it already exists.
         else:
             return item
                 
-def quantity_taker(low, high):
-    if low == None and high == None: #Allows for different error ranges
-        error_message = ("")
-    else
-        error_message = ("between {low} and {high}")
+def quantity_taker(l):
     while True:
         try:
             quantity = int(input("How many?: ").strip()
         except ValueError:
-            print(f"Error: must be a postive integer {error_message}")
-            continue
-        if not (low <= quantity <= high):
-            print(f"Error: must be a positive integer {error_message}")
+            print(f"Error: must be a postive integer")
             continue
         return quantity
 
