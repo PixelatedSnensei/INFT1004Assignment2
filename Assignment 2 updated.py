@@ -17,9 +17,9 @@ def main(): #I have written out all 6 commands that we need to make
         elif command == "4":
             stock_analysis(stock, stock_max)
         elif command == "5":
-            save_changes_to_csv()
+            save_changes_to_csv(stock)
         elif command == "6":
-            quit()
+            quit(stock)
         else:
             print("Error: invalid command")
 
@@ -93,6 +93,37 @@ def stock_analysis(stock, stock_max):
         print()
     total_items = sum(stock.values())
     print(f"Total items available: {total_items}")
+    status_check()
+
+def status_check()
+    for key, value in stock.items
+        decimal = value/stock_max[key]
+        if decimal < 0.5:
+            status = "Low"
+        elif decimal < 0.75:
+            status = "OK"
+        else:
+            status = "High"
+        print(f"{key}: {value}/{stock_max[key]} - Status: {status}")
+        
+
+
+def save_changes_to_csv(stock):
+    try:
+        with open("HiredInventory.csv", mode="w", newline="", encoding="utf-8") as inventory:
+                writer = csv.writer(inventory)
+                writer.writerow(["Category", "Count"])
+                writer.writerows(stock.items)
+        print("Changes successfully saved")
+    except FileNotFoundError:
+        print("File was not found")
+    except OSError as error:
+        print(f"Error: {error}")
+
+def quit(stock):
+    save_changes_to_csv(stock)
+    sys.exit("Bye!")           
+        
 
 def current_item_taker(stock):
     while True:
